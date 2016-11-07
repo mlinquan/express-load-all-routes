@@ -1,10 +1,26 @@
 {
   "name": "express-load-all-routes",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mlinquan/express-load-all-routes.git"
+  },
+  "homepage": "https://github.com/mlinquan/express-load-all-routes#readme",
+  "keywords": [
+    "express",
+    "auto",
+    "load",
+    "router",
+    "router",
+    "route"
+  ],
+  "bugs": {
+    "url": "https://github.com/mlinquan/express-load-all-routes/issues"
   },
   "author": "LinQuan",
   "license": "MIT",
