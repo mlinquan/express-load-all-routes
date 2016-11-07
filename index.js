@@ -30,7 +30,6 @@ function LoadAllRoutes(app, pth, opts) {
           var f = {};
           f[fkey] = require(fval);
           app.use(fkey, f[fkey]);
-          console.log(fkey, fval);
         }
         if(stat.isDirectory()) {
           dir_list.push(fname);
