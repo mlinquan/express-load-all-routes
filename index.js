@@ -4,11 +4,13 @@ var objectAssign = require('object-assign');
 
 function LoadAllRoutes(app, pth, opts) {
   if (typeof pth === 'string') {
-    pth = {path: resolve(pth)};
+    pth = {
+      path: resolve(pth).replace(/\\/g, '/')
+    };
   }
 
   opts = objectAssign({
-    path: resolve('./routes'),
+    path: resolve('./routes').replace(/\\/g, '/'),
     common: '0_',
     middleware: function(req, res, next) {
       return next();
