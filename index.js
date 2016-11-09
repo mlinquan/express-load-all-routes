@@ -9,7 +9,10 @@ function LoadAllRoutes(app, pth, opts) {
 
   opts = objectAssign({
     path: resolve('./routes'),
-    common: '0_'
+    common: '0_',
+    middleware: function(req, res, next) {
+      return next();
+    }
   }, opts, pth);
 
   LoadRoutes(opts.path);
@@ -18,6 +21,9 @@ function LoadAllRoutes(app, pth, opts) {
     var files = fs.readdirSync(ff);
     var dir_list = [];
     files.forEach(function(file, i) {
+        if(opts.exclude && opts.exclude.test(file)) {
+          return;
+        }
         var fname = ff + '/' + file;
         var fkey = fname.replace(opts.path, '')
                         .replace(/\.js$/, '')
@@ -29,7 +35,7 @@ function LoadAllRoutes(app, pth, opts) {
         if(stat.isFile()) {
           var f = {};
           f[fkey] = require(fval);
-          app.use(fkey, f[fkey]);
+          app.use(fkey, f[fkey], opts.middleware);
         }
         if(stat.isDirectory()) {
           dir_list.push(fname);

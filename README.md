@@ -39,6 +39,17 @@ require('express-load-all-routes')(app);
 // routes path: ./path/to/routes
 require('express-load-all-routes')(app, './path/to/routes');
 //for * route
-require('express-load-all-routes')(app, './path/to/routes', {"common": "0_common"});
+require('express-load-all-routes')(app, './path/to/routes', {
+    "common": "0_common"
+});
+// middleware
+var common_middleware = function(req, res, next) {
+    console.log('common_middleware');
+    return next();
+};
+require('express-load-all-routes')(app, './path/to/routes', {
+    "common": "0_common",
+    "middleware": common_middleware
+});
 
 ```
