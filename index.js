@@ -12,7 +12,10 @@ function LoadAllRoutes(app, pth, opts) {
   opts = objectAssign({
     path: resolve('./routes').replace(/\\/g, '/'),
     common: '0_',
-    middleware: function(req, res, next) {
+    beforeMiddleware: function(req, res, next) {
+      return next();
+    },
+    afterMiddleware: function(req, res, next) {
       return next();
     }
   }, opts, pth);
@@ -37,7 +40,7 @@ function LoadAllRoutes(app, pth, opts) {
         if(stat.isFile()) {
           var f = {};
           f[fkey] = require(fval);
-          app.use(fkey, f[fkey], opts.middleware);
+          app.use(fkey, opts.beforeMiddleware, f[fkey], opts.afterMiddleware);
         }
         if(stat.isDirectory()) {
           dir_list.push(fname);

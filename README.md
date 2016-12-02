@@ -43,13 +43,38 @@ require('express-load-all-routes')(app, './path/to/routes', {
     "common": "0_common"
 });
 // middleware
-var common_middleware = function(req, res, next) {
-    console.log('common_middleware');
+var before_middleware = function(req, res, next) {
+    if(!res.userInfo) {
+      error = {
+        status: 400,
+        message: 'Must login.',
+        redirect: '/login'
+      }
+      return next(error);
+    }
+    return next();
+};
+var after_middleware = function(error, req, res, next) {
+    if(error) {
+      if(req.is('json')) {
+        res.status(error.status || 500);
+        return res.json(error);
+      }
+      if(error.redirect) {
+        return res.redirect(error.redirect);
+      }
+      res.status(error.status || 500);
+      res.render('error', {
+        message: err.message,
+        error: err
+      });
+    }
     return next();
 };
 require('express-load-all-routes')(app, './path/to/routes', {
     "common": "0_common",
-    "middleware": common_middleware
+    "beforeMiddleware": before_middleware,
+    "afterMiddleware": after_middleware
 });
 
 ```
