@@ -12,13 +12,14 @@ function LoadAllRoutes(app, pth, opts) {
   opts = objectAssign({
     path: resolve('./routes').replace(/\\/g, '/'),
     common: '0_',
-    beforeMiddleware: function(req, res, next) {
-      return next();
-    },
-    afterMiddleware: function(req, res, next) {
+    middleware: function(req, res, next) {
       return next();
     }
   }, opts, pth);
+
+  if(opts.exclude && Object.prototype.toString.call(opts.exclude) !== '[object RegExp]') {
+    opts.exclude = new RegExp(opts.exclude);
+  }
 
   LoadRoutes(opts.path);
 
@@ -40,7 +41,7 @@ function LoadAllRoutes(app, pth, opts) {
         if(stat.isFile()) {
           var f = {};
           f[fkey] = require(fval);
-          app.use(fkey, opts.beforeMiddleware, f[fkey], opts.afterMiddleware);
+          app.use(fkey, f[fkey], opts.middleware);
         }
         if(stat.isDirectory()) {
           dir_list.push(fname);
