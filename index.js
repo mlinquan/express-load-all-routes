@@ -27,6 +27,9 @@ function LoadAllRoutes(app, pth, opts) {
     var files = fs.readdirSync(ff);
     var dir_list = [];
     files.forEach(function(file, i) {
+        if(/^\./.test(file)) {
+          return;
+        }
         if(opts.exclude && opts.exclude.test(file)) {
           return;
         }
