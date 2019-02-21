@@ -21,9 +21,11 @@ function LoadAllRoutes(app, pth, opts) {
     opts.exclude = new RegExp(opts.exclude);
   }
 
+  var f = {};
+
   LoadRoutes(opts.path);
 
-  function LoadRoutes(ff) {  
+  function LoadRoutes(ff) {
     var files = fs.readdirSync(ff);
     var dir_list = [];
     files.forEach(function(file, i) {
@@ -42,9 +44,7 @@ function LoadAllRoutes(app, pth, opts) {
         var fval = fname.replace(/\.js$/, '');
         var stat = fs.lstatSync(fname);
         if(stat.isFile()) {
-          var f = {};
-          f[fkey] = require(fval);
-          app.use(fkey, f[fkey], opts.middleware);
+          f[fkey] = fval;
         }
         if(stat.isDirectory()) {
           dir_list.push(fname);
@@ -55,6 +55,13 @@ function LoadAllRoutes(app, pth, opts) {
           });
         }
     });
+  }
+
+  for(var x in f) {
+    app.use(x, require(f[x]), opts.middleware);
+  }
+  if(opts.debug) {
+    console.log(f)
   }
 }
 
