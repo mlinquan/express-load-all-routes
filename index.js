@@ -22,6 +22,7 @@ function LoadAllRoutes(app, pth, opts) {
   }
 
   var f = {};
+  var f2 = {};
 
   LoadRoutes(opts.path);
 
@@ -57,9 +58,13 @@ function LoadAllRoutes(app, pth, opts) {
     });
   }
 
-  for(var x in f) {
-    app.use(x, require(f[x]), opts.middleware);
-  }
+  var keys = Object.keys(f);
+  keys = keys.sort();
+
+  keys.forEach(function(key) {
+    app.use(key, require(f[key]), opts.middleware);
+  });
+
   if(opts.debug) {
     console.log(f)
   }
